@@ -155,6 +155,7 @@
         "ramda": "^0.29.0",
         "semantic-release": "^21.1.1",
         "serialize-javascript": "^6.0.1",
+        "terser": "^5.14.2",
         "shelljs": "^0.8.5",
         "simple-git": "^3.19.1",
         "webpack-dev-server": "^4.15.2"
