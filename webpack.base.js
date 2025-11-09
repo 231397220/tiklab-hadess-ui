@@ -32,6 +32,8 @@ module.exports = {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
             'react-dom': '@hot-loader/react-dom',
+            lodash: path.resolve(__dirname, 'src/polyfills/safe-lodash.js'),
+            ramda: path.resolve(__dirname, 'src/polyfills/safe-ramda.js'),
         },
 
     },
