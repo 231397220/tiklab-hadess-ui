@@ -154,6 +154,7 @@
         "pug": "^3.0.2",
         "ramda": "^0.29.0",
         "semantic-release": "^21.1.1",
+        "standard-version": "^9.5.0",
         "serialize-javascript": "^6.0.1",
         "shelljs": "^0.8.5",
         "simple-git": "^3.19.1",
