@@ -11,11 +11,11 @@ module.exports = merge(baseWebpackConfig,{
     mode:"development",
     output:{
         path: path.resolve(__dirname, './dist'),
-        filename: 'assets/js/[name].[hash].js',
-        chunkFilename:'[name][chunkhash].js',
+        filename: 'assets/js/[name].js',
+        chunkFilename:'[name].js',
         publicPath: '/',
     },
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'eval-cheap-module-source-map',
     // 插件
     plugins:[
         new HtmlWebpackPlugin({
@@ -35,13 +35,15 @@ module.exports = merge(baseWebpackConfig,{
     ],
     // 开发环境本地启动的服务配置
     devServer: {
-        contentBase: path.join(__dirname, './dist'),
+        static: {
+            directory: path.resolve(__dirname, './dist')
+        },
         hot:true,
         compress:true,
         port:3030,
         host: '0.0.0.0',
         historyApiFallback: true,
-        disableHostCheck: true,
+        allowedHosts: 'all',
         headers:{
            'Access-Control-Allow-Origin': "http://192.168.10.78:8083"
         }
