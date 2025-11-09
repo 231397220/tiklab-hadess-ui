@@ -52,13 +52,6 @@ module.exports = merge(baseWebpackConfig, {
             automaticNameDelimiter: '--', // 分包打包生成文件的名称的连接符
             name:false,
             cacheGroups: { //  cacheGroups 缓存组，如：将某个特定的库打包
-                safeLodash: {
-                    name: 'chunk-safe-lodash',
-                    chunks:'all',
-                    test: /safe-lodash/,
-                    priority: 40,
-                    reuseExistingChunk: true
-                },
                 antIcon: {
                     name: 'chunk-antIcon',
                     chunks: 'all',
