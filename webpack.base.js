@@ -3,7 +3,6 @@ const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');//压缩css
 
 const DIST_PATH = path.resolve(__dirname, 'dist');
@@ -25,14 +24,16 @@ const lessModuleRegex = /\.module\.less$/;
 
 module.exports = {
     output: {
-        filename: 'js/[name].[hash:8].js',
-        chunkFilename: 'js/[name].[hash:8].js',
+        filename: 'js/[name].[contenthash:8].js',
+        chunkFilename: 'js/[name].[contenthash:8].js',
         path: DIST_PATH,
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
             'react-dom': '@hot-loader/react-dom',
+            lodash: path.resolve(__dirname, 'src/polyfills/safe-lodash.js'),
+            ramda: path.resolve(__dirname, 'src/polyfills/safe-ramda.js'),
         },
 
     },
@@ -193,9 +194,8 @@ module.exports = {
         }),
 
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
+            filename: 'css/[name].[contenthash:8].css',
             ignoreOrder: true
         }),
-        new CssMinimizerPlugin(),
     ]
 };

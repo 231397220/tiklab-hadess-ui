@@ -1,17 +1,11 @@
-
 const { merge } = require('webpack-merge');
 const path = require('path');
-const os = require('os');
 const TerserPlugin = require('terser-webpack-plugin');
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const PurifyCSSPlugin = require('purifycss-webpack')
-const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
-const optimizeCss = require('optimize-css-assets-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 
 const baseWebpackConfig = require('./webpack.base.js');
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 
@@ -22,17 +16,6 @@ module.exports = merge(baseWebpackConfig, {
         path.resolve(__dirname, './src/index.js')
     ],
     plugins: [
-        new optimizeCss({
-            assetNameRegExp: /\.css$/g,
-            cssProcessor: require('cssnano'),
-            cssProcessorOptions: {
-                safe: true,
-                discardComments: {
-                    removeAll: true
-                }
-            }
-        }),
-        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             alwaysWriteToDisk: true,
             title:'Hadess',
@@ -98,15 +81,16 @@ module.exports = merge(baseWebpackConfig, {
         },
         minimizer: [
             new TerserPlugin({  // 压缩js
-                cache: true,
                 parallel: true,
                 terserOptions: {
                     compress: {
                         drop_console: false,
                         drop_debugger: true // 去除console.log 和debuger
                     },
-                }
-            })
+                },
+                extractComments: false,
+            }),
+            new CssMinimizerPlugin(),
         ]
     }
 });

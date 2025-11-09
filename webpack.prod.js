@@ -3,14 +3,11 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const baseWebpackConfig = require('./webpack.base');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const optimizeCss = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
 const customEnv = process.env.CUSTOM_ENV;
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const {webpackGlobal} = require('./environment/environment-' + customEnv);
 
 module.exports = merge(baseWebpackConfig, {
@@ -20,17 +17,6 @@ module.exports = merge(baseWebpackConfig, {
     ],
     devtool: 'inline-source-map',
     plugins: [
-        new optimizeCss({
-            assetNameRegExp: /\.css$/g,
-            cssProcessor: require('cssnano'),
-            cssProcessorOptions: {
-                safe: true,
-                discardComments: {
-                    removeAll: true
-                }
-            }
-        }),
-        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             alwaysWriteToDisk: true,
             title:'Hadess',
@@ -46,11 +32,6 @@ module.exports = merge(baseWebpackConfig, {
             }
         }),
         new webpack.DefinePlugin({ENV:JSON.stringify(customEnv), ...webpackGlobal}),
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash:8].css',
-            ignoreOrder: true
-        }),
-        new CssMinimizerPlugin(),
         new ProgressBarPlugin(),
         new BundleAnalyzerPlugin(),
 
@@ -71,10 +52,10 @@ module.exports = merge(baseWebpackConfig, {
             automaticNameDelimiter: '--', // 分包打包生成文件的名称的连接符
             name:false,
             cacheGroups: { //  cacheGroups 缓存组，如：将某个特定的库打包
-                lodash: {
-                    name: 'chunk-lodash',
+                safeLodash: {
+                    name: 'chunk-safe-lodash',
                     chunks:'all',
-                    test: /lodash/,
+                    test: /safe-lodash/,
                     priority: 40,
                     reuseExistingChunk: true
                 },
@@ -185,7 +166,6 @@ module.exports = merge(baseWebpackConfig, {
         },
         minimizer: [
             new TerserPlugin({  // 压缩js
-                cache: true,
                 parallel: true,
                 terserOptions: {
                     compress: {
@@ -193,8 +173,10 @@ module.exports = merge(baseWebpackConfig, {
                         drop_console: false,
                         drop_debugger: false,
                     },
-                }
-            })
+                },
+                extractComments: false,
+            }),
+            new CssMinimizerPlugin(),
         ]
     },
 });
