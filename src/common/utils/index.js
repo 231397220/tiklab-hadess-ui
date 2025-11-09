@@ -8,8 +8,25 @@
 import React from "react";
 import Cookies from 'js-cookie'
 
+const parseCookies = (cookies = {}) => {
+    const parsed = {}
+    Object.entries(cookies).forEach(([key, value]) => {
+        if (typeof value !== 'string') {
+            parsed[key] = value
+            return
+        }
+        try {
+            parsed[key] = JSON.parse(value)
+        } catch (error) {
+            parsed[key] = value
+        }
+    })
+    return parsed
+}
+
 const getUser = () => {
-    return Cookies.getJSON()
+    const cookies = Cookies.get()
+    return parseCookies(cookies)
 }
 
 const removeUser = () => {
